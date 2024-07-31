@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
 
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +20,7 @@ public class SpringCliApi {
   private final SpringCliService springCliService;
 
   @PostMapping
-  public String createApp(@RequestBody CreateAppDTO createAppDTO) throws IOException, InterruptedException {
+  public ResponseEntity<InputStreamResource> createApp(@RequestBody CreateAppDTO createAppDTO) throws IOException, InterruptedException {
     return springCliService.createApp(createAppDTO);
   }
 
