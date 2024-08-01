@@ -18,6 +18,6 @@ public class CreateAppDTO {
   private String projectPackageName = projectGroupId;
   private String projectVersion = "1.0.0";
   private List<String> dependencies;
-  private List<DataBaseTableDTO> dataBaseTable;
-  private DataBaseRequestDTO dataBaseRequestDTO;
+  private List<DataBaseTableDTO> tables;
+  private DataBaseRequestDTO database;
 }
