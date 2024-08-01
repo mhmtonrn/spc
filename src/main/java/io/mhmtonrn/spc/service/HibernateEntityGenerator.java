@@ -1,6 +1,7 @@
 package io.mhmtonrn.spc.service;
 
 import io.mhmtonrn.spc.model.database.res.TableColumnDTO;
+import io.mhmtonrn.spc.model.springcli.CreateAppDTO;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
@@ -16,7 +17,7 @@ import java.util.Map;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HibernateEntityGenerator {
 
-    public static void generateEntities(Path path, List<TableColumnDTO> columns) throws IOException {
+    public static void generateEntities(CreateAppDTO createAppDTO, Path path, List<TableColumnDTO> columns) throws IOException {
 
 
         Path entityPath = Paths.get(path + "/data/entity");
@@ -33,6 +34,7 @@ public class HibernateEntityGenerator {
             StringBuilder entity = entities.get(tableName);
 
             if (entity.isEmpty()) {
+                entity.append("package ").append(createAppDTO.getProjectPackageName()).append(".").append(createAppDTO.getProjectArtifactId()).append(".").append(createAppDTO.getAppName()).append(".data.entity;\n\n");
                 entity.append("import jakarta.persistence.*;\n\n");
                 entity.append("@Entity\n");
                 entity.append("@Table(name = \"").append(tableName).append("\")\n");

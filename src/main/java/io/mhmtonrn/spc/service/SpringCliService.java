@@ -47,7 +47,7 @@ public class SpringCliService {
             tablesDetail.setTableName(dataBaseTableDTO.getTableName());
             tablesDetail.setSchemaName(dataBaseTableDTO.getSchemaName());
             List<TableColumnDTO> tableColumnDTOs = databaseService.getTablesDetail(tablesDetail);
-            HibernateEntityGenerator.generateEntities(entityPath,tableColumnDTOs);
+            HibernateEntityGenerator.generateEntities(createAppDTO,entityPath,tableColumnDTOs);
         }
 
         String projectZipFile = projectZipService.createZip(createAppDTO,projectPath);
