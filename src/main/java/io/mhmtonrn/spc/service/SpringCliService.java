@@ -1,10 +1,12 @@
 package io.mhmtonrn.spc.service;
 
+import io.mhmtonrn.spc.DependencyUtil;
 import io.mhmtonrn.spc.model.database.req.TableDetailRequestDTO;
 import io.mhmtonrn.spc.model.database.res.DataBaseTableDTO;
 import io.mhmtonrn.spc.model.database.res.TableColumnDTO;
 import io.mhmtonrn.spc.model.springcli.CreateAppDTO;
 import io.mhmtonrn.spc.service.generators.PojoBuilder;
+import io.mhmtonrn.spc.service.generators.PomGenerator;
 import io.mhmtonrn.spc.service.impl.ProjectZipService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -39,16 +41,19 @@ public class SpringCliService {
         String projectPath = projectCreatorService.createProjectFromBasicTemplate(createAppDTO);
 
         Path entityPath = Paths.get(projectCreatorService.getInnerPath(createAppDTO, projectPath));
+        Path getInnerResourcePath = Paths.get(projectCreatorService.getInnerResourcePath(createAppDTO, projectPath));
 
         List<DataBaseTableDTO> dataBaseTable = createAppDTO.getTables();
         TableDetailRequestDTO tablesDetail = new TableDetailRequestDTO();
         tablesDetail.setDatabase(createAppDTO.getDatabase());
 
+        PomGenerator.addDependency(projectPath + "/" + createAppDTO.getAppName(), DependencyUtil.getPostgresDependency());
+
         for (DataBaseTableDTO dataBaseTableDTO : dataBaseTable) {
             tablesDetail.setTableName(dataBaseTableDTO.getTableName());
             tablesDetail.setSchemaName(dataBaseTableDTO.getSchemaName());
             List<TableColumnDTO> tableColumnDTOs = databaseService.getTablesDetail(tablesDetail);
-            new PojoBuilder(createAppDTO, entityPath, tableColumnDTOs).entity().dto().mapper();
+            new PojoBuilder(createAppDTO, entityPath, tableColumnDTOs).entity().dto().mapper().properties(getInnerResourcePath).build();
 
         }
 

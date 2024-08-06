@@ -20,4 +20,5 @@ public class CreateAppDTO {
   private List<String> dependencies;
   private List<DataBaseTableDTO> tables;
   private DataBaseRequestDTO database;
+
 }

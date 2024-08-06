@@ -34,7 +34,7 @@ public class HibernateEntityGenerator extends PojoGenerator {
                 entity.append("package ").append(createAppDTO.getProjectPackageName()).append(".").append(createAppDTO.getAppName()).append(".data.entity;\n\n");
                 entity.append("import jakarta.persistence.*;\n\n");
                 entity.append("@Entity\n");
-                entity.append("@Table(name = \"").append(tableName).append("\n").append(", schema = \"").append(column.getTableSchema()).append("\")\n");
+                entity.append("@Table(name = \"").append(tableName).append("\"").append(", schema = \"").append(column.getTableSchema()).append("\")\n");
                 entity.append("public class ").append(toCamelCase(tableName)).append(" {\n\n");
             }
 

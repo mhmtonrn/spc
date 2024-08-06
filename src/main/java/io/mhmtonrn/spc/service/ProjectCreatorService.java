@@ -13,5 +13,7 @@ public interface ProjectCreatorService {
 
     String getInnerPath(CreateAppDTO createAppDTO, String projectPath);
 
+    String getInnerResourcePath(CreateAppDTO createAppDTO, String projectPath);
+
     String[] springCliCreateCommand(CreateAppDTO createAppDTO, UUID uuid);
 }

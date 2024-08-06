@@ -1,5 +1,6 @@
 package io.mhmtonrn.spc.service.generators;
 
+
 public abstract class PojoGenerator {
 
     protected static String toCamelCase(String s) {

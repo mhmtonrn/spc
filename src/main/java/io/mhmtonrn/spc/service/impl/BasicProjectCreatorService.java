@@ -34,6 +34,12 @@ public class BasicProjectCreatorService implements ProjectCreatorService {
     }
 
     @Override
+    public String getInnerResourcePath(CreateAppDTO createAppDTO, String projectPath) {
+        return projectPath + "/" + createAppDTO.getAppName() +
+                "/src/main/resources/application.properties";
+    }
+
+    @Override
     public String[] springCliCreateCommand(CreateAppDTO createAppDTO, UUID uuid) {
         String cmd = "cd temp " +
                 " && mkdir " + uuid +
