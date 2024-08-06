@@ -4,6 +4,7 @@ import io.mhmtonrn.spc.model.database.req.TableDetailRequestDTO;
 import io.mhmtonrn.spc.model.database.res.DataBaseTableDTO;
 import io.mhmtonrn.spc.model.database.res.TableColumnDTO;
 import io.mhmtonrn.spc.model.springcli.CreateAppDTO;
+import io.mhmtonrn.spc.service.generators.PojoBuilder;
 import io.mhmtonrn.spc.service.impl.ProjectZipService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -37,20 +38,21 @@ public class SpringCliService {
 
         String projectPath = projectCreatorService.createProjectFromBasicTemplate(createAppDTO);
 
-        Path entityPath = Paths.get(projectCreatorService.getInnerPath(createAppDTO,projectPath));
+        Path entityPath = Paths.get(projectCreatorService.getInnerPath(createAppDTO, projectPath));
 
         List<DataBaseTableDTO> dataBaseTable = createAppDTO.getTables();
         TableDetailRequestDTO tablesDetail = new TableDetailRequestDTO();
         tablesDetail.setDatabase(createAppDTO.getDatabase());
 
-        for (DataBaseTableDTO dataBaseTableDTO :dataBaseTable){
+        for (DataBaseTableDTO dataBaseTableDTO : dataBaseTable) {
             tablesDetail.setTableName(dataBaseTableDTO.getTableName());
             tablesDetail.setSchemaName(dataBaseTableDTO.getSchemaName());
             List<TableColumnDTO> tableColumnDTOs = databaseService.getTablesDetail(tablesDetail);
-            HibernateEntityGenerator.generateEntities(createAppDTO,entityPath,tableColumnDTOs);
+            new PojoBuilder(createAppDTO, entityPath, tableColumnDTOs).entity().dto().mapper();
+
         }
 
-        String projectZipFile = projectZipService.createZip(createAppDTO,projectPath);
+        String projectZipFile = projectZipService.createZip(createAppDTO, projectPath);
 
         removeTemp(projectPath);
         HttpHeaders header = getHttpHeaders(createAppDTO);

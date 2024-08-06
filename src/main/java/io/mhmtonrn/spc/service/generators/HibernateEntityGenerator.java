@@ -1,9 +1,7 @@
-package io.mhmtonrn.spc.service;
+package io.mhmtonrn.spc.service.generators;
 
 import io.mhmtonrn.spc.model.database.res.TableColumnDTO;
 import io.mhmtonrn.spc.model.springcli.CreateAppDTO;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 
 import java.io.FileWriter;
@@ -14,11 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class HibernateEntityGenerator {
 
-    public static void generateEntities(CreateAppDTO createAppDTO, Path path, List<TableColumnDTO> columns) throws IOException {
+public class HibernateEntityGenerator extends PojoGenerator {
 
+    public static void generateClass(CreateAppDTO createAppDTO, Path path, List<TableColumnDTO> columns) throws IOException {
 
         Path entityPath = Paths.get(path + "/data/entity");
 
@@ -34,10 +31,10 @@ public class HibernateEntityGenerator {
             StringBuilder entity = entities.get(tableName);
 
             if (entity.isEmpty()) {
-                entity.append("package ").append(createAppDTO.getProjectPackageName()).append(".").append(createAppDTO.getProjectArtifactId()).append(".").append(createAppDTO.getAppName()).append(".data.entity;\n\n");
+                entity.append("package ").append(createAppDTO.getProjectPackageName()).append(".").append(createAppDTO.getAppName()).append(".data.entity;\n\n");
                 entity.append("import jakarta.persistence.*;\n\n");
                 entity.append("@Entity\n");
-                entity.append("@Table(name = \"").append(tableName).append("\")\n");
+                entity.append("@Table(name = \"").append(tableName).append("\n").append(", schema = \"").append(column.getTableSchema()).append("\")\n");
                 entity.append("public class ").append(toCamelCase(tableName)).append(" {\n\n");
             }
 
@@ -75,40 +72,5 @@ public class HibernateEntityGenerator {
                 writer.write(tableName.getValue().toString());
             }
         }
-    }
-
-    private static String mapDataType(String dataType) {
-        return switch (dataType.toLowerCase()) {
-            case "varchar", "char", "text" -> "String";
-            case "int", "integer" -> "Integer";
-            case "bigint" -> "Long";
-            case "decimal", "numeric" -> "java.math.BigDecimal";
-            case "date" -> "java.time.LocalDate";
-            case "timestamp without time zone" -> "java.time.LocalDateTime";
-            // Add other mappings as needed
-            default -> "String";
-        };
-    }
-
-    private static String toCamelCase(String s) {
-        return toCamelCase(s, true);
-    }
-
-    private static String toCamelCase(String s, boolean capitalizeFirstLetter) {
-        StringBuilder result = new StringBuilder();
-        boolean nextUpperCase = capitalizeFirstLetter;
-        for (char c : s.toCharArray()) {
-            if (c == '_') {
-                nextUpperCase = true;
-            } else {
-                if (nextUpperCase) {
-                    result.append(Character.toUpperCase(c));
-                    nextUpperCase = false;
-                } else {
-                    result.append(c);
-                }
-            }
-        }
-        return result.toString();
     }
 }
