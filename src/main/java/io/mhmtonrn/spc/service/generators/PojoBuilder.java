@@ -37,6 +37,11 @@ public class PojoBuilder {
         return this;
     }
 
+    public PojoBuilder repository() throws IOException {
+        RepositoryGenerator.generateClass(createAppDTO, path, columns);
+        return this;
+    }
+
     public void build() {
         log.info("Build");
     }

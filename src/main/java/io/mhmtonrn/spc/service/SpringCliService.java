@@ -53,7 +53,13 @@ public class SpringCliService {
             tablesDetail.setTableName(dataBaseTableDTO.getTableName());
             tablesDetail.setSchemaName(dataBaseTableDTO.getSchemaName());
             List<TableColumnDTO> tableColumnDTOs = databaseService.getTablesDetail(tablesDetail);
-            new PojoBuilder(createAppDTO, entityPath, tableColumnDTOs).entity().dto().mapper().properties(getInnerResourcePath).build();
+            new PojoBuilder(createAppDTO, entityPath, tableColumnDTOs)
+                    .entity()
+                    .dto()
+                    .mapper()
+                    .properties(getInnerResourcePath)
+                    .repository()
+                    .build();
 
         }
 
